@@ -1,3 +1,5 @@
+import requests
+import csv
 from fastapi import FastAPI
 from sqlalchemy.orm import Session
 from models import Item, Base
@@ -5,6 +7,11 @@ from db import EngineConn
 from typing import Union
 
 app = FastAPI()
+
+agent_ip = "ipipip"
+agent_port = "80"
+
+url = f"http://{agent_ip}:{agent_port}/"
 
 # 데이터베이스 연결 설정
 db_conn = EngineConn()
@@ -31,3 +38,25 @@ def read_item(item_id: int):
         return db_item.to_dict()
     else:
         return {"error": "Item not found"}
+
+@app.get("/")
+def get_csv():
+    while(True):
+        try:
+            # GET req
+            response = requests.get(f"https://{agent_ip}:{agent_port}/")
+
+            # response
+            if response.status_code == 200:
+                csv_data = response.text
+
+                # save csv
+                with open("data.csv", "w") as csv_file:
+                    csv_file.write(csv_data)
+
+                return {"message": "CSV data saving success"}
+            else:
+                return {"error": "failure."}
+
+        except Exception as e:
+            return {"error": str(e)}
