@@ -1,3 +1,8 @@
+import requests
+import csv
+import asyncio
+import json
+
 from fastapi import FastAPI
 from sqlalchemy.orm import Session
 from models import Item, Base
@@ -6,10 +11,16 @@ from typing import Union
 
 app = FastAPI()
 
+agent_ip = "54.253.191.26"
+agent_port = "80"
+
+url = f"http://{agent_ip}:{agent_port}/"
+
 # 데이터베이스 연결 설정
 db_conn = EngineConn()
 Base.metadata.create_all(db_conn.engine)
 
+buffer = []
 @app.get("/")
 def read_root():
     return {"Hello": "Ploio"}
@@ -31,3 +42,69 @@ def read_item(item_id: int):
         return db_item.to_dict()
     else:
         return {"error": "Item not found"}
+
+@app.get("/summary/security")
+def return_traffic_log():
+    with open("./agent_data_buffer.json", "r") as json_file:
+        data = json.load(json_file)
+    return data
+
+async def get_pkt_from_agent():
+    while True:
+        try:
+            # GET req
+            response = requests.get(f"https://naver.com")
+            # response = requests.get(f"https://{agent_ip}:{agent_port}/")
+
+            # response
+            if response.status_code == 200:
+                csv_data = response.text
+                
+                # save csv
+                with open("./data.csv", 'r') as csv_data:
+                    csv_reader = csv.DictReader(csv_data)
+                    for row in csv_reader:
+                    # 필드 이름을 기준으로 데이터 추출
+                        data = {
+                            'unix_epoch': int(row['unix epoch']),
+                            'proto': row['proto'],
+                            'L2': row['L2'],
+                            'L3': int(row['L3']),
+                            'Lx': int(row['L3']),
+                            'sport': int(row['sport']),
+                            'dport': int(row['dport']),
+                            'sip': row['sip'][0:4],  # 16 octets 중 처음 4 octets만 사용
+                            'dip': row['dip'][0:4],  # 16 octets 중 처음 4 octets만 사용
+                            'size': int(row['size'])
+                        }
+                        
+                        buffer.append(data)
+                with open("agent_data_buffer.json", 'w') as json_file:
+                    json.dump(buffer, json_file, indent=4)
+
+                print({"message": "CSV data saving success"})
+            else:
+                print({"error": "failure."})
+        except Exception as e:
+            print({"error": str(e)})
+        await asyncio.sleep(1)
+
+def csv_to_json(csv_data):
+    csv_lines = csv_data.strip().split('\n')
+    csv_reader = csv.reader(csv_lines)
+    json_data = []
+
+    for row in csv_reader:
+        record = {
+            'src_ip': row[0],
+            'dst_ip': row[1],
+            'http_header': row[2]
+        }
+        json_data.append(record)
+
+    return json.dumps(json_data)
+
+@app.on_event("startup")
+async def startup_event():
+    asyncio.create_task(get_pkt_from_agent())
+

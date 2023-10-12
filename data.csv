@@ -1,0 +1,4 @@
+unix epoch,proto,L2,L3,Lx,sport,dport,sip,dip,size
+1634022275,proto_enum,AddressFamilyValue,80,additional_proto,12345,80,192.168.1.2,203.0.113.7,1500
+1634022285,proto_enum,AddressFamilyValue,81,additional_proto,54321,443,192.168.1.3,8.8.8.8,1200
+1634022295,proto_enum,AddressFamilyValue,82,additional_proto,9876,22,192.168.1.4,10.0.0.1,800
