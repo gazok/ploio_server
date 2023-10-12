@@ -1,5 +1,6 @@
 import requests
 import csv
+import asyncio
 from fastapi import FastAPI
 from sqlalchemy.orm import Session
 from models import Item, Base
@@ -17,9 +18,9 @@ url = f"http://{agent_ip}:{agent_port}/"
 db_conn = EngineConn()
 Base.metadata.create_all(db_conn.engine)
 
-# @app.get("/")
-# def read_root():
-#     return {"Hello": "Ploio"}
+@app.get("/")
+def read_root():
+    return {"Hello": "Ploio"}
     
 # 라우트: 데이터 가져오기
 @app.get("/items/{item_id}")
@@ -39,9 +40,8 @@ def read_item(item_id: int):
     else:
         return {"error": "Item not found"}
 
-@app.get("/")
-def get_csv():
-    while(True):
+async def get_pkt_from_agent():
+    while True:
         try:
             # GET req
             response = requests.get(f"https://naver.com")
@@ -54,10 +54,15 @@ def get_csv():
                 # save csv
                 with open("data.csv", "w") as csv_file:
                     csv_file.write(csv_data)
-                # print(csv_data)
-                return {"message": "CSV data saving success"}
+                
+                print({"message": "CSV data saving success"})
             else:
-                return {"error": "failure."}
-
+                print({"error": "failure."})
         except Exception as e:
-            return {"error": str(e)}
+            print({"error": str(e)})
+        await asyncio.sleep(1)
+
+@app.on_event("startup")
+async def startup_event():
+    asyncio.create_task(get_pkt_from_agent())
+
