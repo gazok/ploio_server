@@ -43,6 +43,12 @@ def read_item(item_id: int):
     else:
         return {"error": "Item not found"}
 
+@app.get("/summary/security")
+def return_traffic_log():
+    with open("./agent_data_buffer.json", "r") as json_file:
+        data = json.load(json_file)
+    return data
+
 async def get_pkt_from_agent():
     while True:
         try:
