@@ -8,7 +8,7 @@ from typing import Union
 
 app = FastAPI()
 
-agent_ip = "ipipip"
+agent_ip = "54.253.191.26"
 agent_port = "80"
 
 url = f"http://{agent_ip}:{agent_port}/"
@@ -17,9 +17,9 @@ url = f"http://{agent_ip}:{agent_port}/"
 db_conn = EngineConn()
 Base.metadata.create_all(db_conn.engine)
 
-@app.get("/")
-def read_root():
-    return {"Hello": "Ploio"}
+# @app.get("/")
+# def read_root():
+#     return {"Hello": "Ploio"}
     
 # 라우트: 데이터 가져오기
 @app.get("/items/{item_id}")
@@ -44,7 +44,8 @@ def get_csv():
     while(True):
         try:
             # GET req
-            response = requests.get(f"https://{agent_ip}:{agent_port}/")
+            response = requests.get(f"https://naver.com")
+            # response = requests.get(f"https://{agent_ip}:{agent_port}/")
 
             # response
             if response.status_code == 200:
@@ -53,7 +54,7 @@ def get_csv():
                 # save csv
                 with open("data.csv", "w") as csv_file:
                     csv_file.write(csv_data)
-
+                # print(csv_data)
                 return {"message": "CSV data saving success"}
             else:
                 return {"error": "failure."}
