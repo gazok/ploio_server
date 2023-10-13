@@ -17,8 +17,8 @@ agent_port = "80"
 url = f"http://{agent_ip}:{agent_port}/"
 
 # 데이터베이스 연결 설정
-db_conn = EngineConn()
-Base.metadata.create_all(db_conn.engine)
+# db_conn = EngineConn()
+# Base.metadata.create_all(db_conn.engine)
 
 buffer = []
 @app.get("/")
@@ -30,22 +30,22 @@ async def startup_event():
     asyncio.create_task(get_pkt_from_agent())    
     
 # 라우트: 데이터 가져오기
-@app.get("/items/{item_id}")
-def read_item(item_id: int):
+# @app.get("/items/{item_id}")
+# def read_item(item_id: int):
     # 데이터베이스 연결과 세션 생성
-    db = db_conn.get_session()
+    # db = db_conn.get_session()
     
     # 데이터베이스에서 아이템 검색
-    db_item = db.query(Item).filter(Item.id == item_id).first()
+    # db_item = db.query(Item).filter(Item.id == item_id).first()
     
     # 데이터베이스 세션 종료
-    db.close()
+    # db.close()
     
     # 아이템을 딕셔너리 형태로 반환
-    if db_item:
-        return db_item.to_dict()
-    else:
-        return {"error": "Item not found"}
+    # if db_item:
+    #     return db_item.to_dict()
+    # else:
+    #     return {"error": "Item not found"}
 
 @app.get("/summary/security")
 def return_traffic_log():
@@ -76,10 +76,11 @@ async def get_pkt_from_agent():
                             'dst_port': int(row['dst_port']),
                             'data_len': int(row['data_len']),
                             'protocol': row['protocol'],
+                            'timestamp' : int(row['timestamp'])
                         }
                         buffer.append(data)
                 with open("agent_data_buffer.json", 'w') as json_file:
-                    json.dump(buffer, json_file, indent=4)
+                    json.dump({'data' : buffer}, json_file, indent=4)
 
                 print({"message": "CSV data saving success"})
             # else:
@@ -87,18 +88,3 @@ async def get_pkt_from_agent():
         except Exception as e:
             print({"error": str(e)})
         await asyncio.sleep(1)
-
-# def csv_to_json(csv_data):
-#     csv_lines = csv_data.strip().split('\n')
-#     csv_reader = csv.reader(csv_lines)
-#     json_data = []
-
-#     for row in csv_reader:
-#         record = {
-#             'src_ip': row[0],
-#             'dst_ip': row[1],
-#             'http_header': row[2]
-#         }
-#         json_data.append(record)
-
-#     return json.dumps(json_data)
