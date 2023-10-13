@@ -57,12 +57,12 @@ async def get_pkt_from_agent():
     while True:
         try:
             # GET req
-            response = requests.get(f"https://naver.com")
+            # response = requests.get(f"https://naver.com")
             # response = requests.get(f"https://{agent_ip}:{agent_port}/")
 
             # response
-            if response.status_code == 200:
-                csv_data = response.text
+            # if response.status_code == 200:
+            #     csv_data = response.text
                 
                 # save csv
                 with open("./data.csv", 'r') as csv_data:
@@ -82,8 +82,8 @@ async def get_pkt_from_agent():
                     json.dump(buffer, json_file, indent=4)
 
                 print({"message": "CSV data saving success"})
-            else:
-                print({"error": "failure."})
+            # else:
+            #     print({"error": "failure."})
         except Exception as e:
             print({"error": str(e)})
         await asyncio.sleep(1)
