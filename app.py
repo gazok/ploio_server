@@ -66,18 +66,13 @@ async def get_pkt_from_agent():
                     for row in csv_reader:
                     # 필드 이름을 기준으로 데이터 추출
                         data = {
-                            'unix_epoch': int(row['unix epoch']),
-                            'proto': row['proto'],
-                            'L2': row['L2'],
-                            'L3': int(row['L3']),
-                            'Lx': int(row['L3']),
-                            'sport': int(row['sport']),
-                            'dport': int(row['dport']),
-                            'sip': row['sip'][0:4],  # 16 octets 중 처음 4 octets만 사용
-                            'dip': row['dip'][0:4],  # 16 octets 중 처음 4 octets만 사용
-                            'size': int(row['size'])
+                            'src_ip': (row['src_ip']),
+                            'src_port': int(row['src_port']),
+                            'dst_ip': row['dst_ip'],
+                            'dst_port': int(row['dst_port']),
+                            'data_len': int(row['data_len']),
+                            'protocol': row['protocol'],
                         }
-                        
                         buffer.append(data)
                 with open("agent_data_buffer.json", 'w') as json_file:
                     json.dump(buffer, json_file, indent=4)
@@ -89,20 +84,20 @@ async def get_pkt_from_agent():
             print({"error": str(e)})
         await asyncio.sleep(1)
 
-def csv_to_json(csv_data):
-    csv_lines = csv_data.strip().split('\n')
-    csv_reader = csv.reader(csv_lines)
-    json_data = []
+# def csv_to_json(csv_data):
+#     csv_lines = csv_data.strip().split('\n')
+#     csv_reader = csv.reader(csv_lines)
+#     json_data = []
 
-    for row in csv_reader:
-        record = {
-            'src_ip': row[0],
-            'dst_ip': row[1],
-            'http_header': row[2]
-        }
-        json_data.append(record)
+#     for row in csv_reader:
+#         record = {
+#             'src_ip': row[0],
+#             'dst_ip': row[1],
+#             'http_header': row[2]
+#         }
+#         json_data.append(record)
 
-    return json.dumps(json_data)
+#     return json.dumps(json_data)
 
 @app.on_event("startup")
 async def startup_event():
