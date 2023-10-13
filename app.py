@@ -23,7 +23,11 @@ Base.metadata.create_all(db_conn.engine)
 buffer = []
 @app.get("/")
 def read_root():
-    return {"Hello": "Ploio"}
+    return "hello ploio"
+
+@app.on_event("startup")
+async def startup_event():
+    asyncio.create_task(get_pkt_from_agent())    
     
 # 라우트: 데이터 가져오기
 @app.get("/items/{item_id}")
@@ -98,8 +102,3 @@ async def get_pkt_from_agent():
 #         json_data.append(record)
 
 #     return json.dumps(json_data)
-
-@app.on_event("startup")
-async def startup_event():
-    asyncio.create_task(get_pkt_from_agent())
-
