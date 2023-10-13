@@ -1,6 +1,18 @@
 # ploio_server
 BoB 12th ploio application server repository
 
+<br>
+ 
+## Config
+
+- `python 3.11.4` <br>
+- IDE : `Pycharm` <br>
+- Framework : `FastAPI` <br>
+- Database : `MySQL` <br>
+- ORM : `Sqlalchemy` <br>
+
+<br>
+
 ## commit message convention
 
 ### commit message structure
@@ -13,6 +25,8 @@ body
 footer
 ```
 
+<br>
+ 
 #### type
 
 - add ： 파일 추가
@@ -24,8 +38,12 @@ footer
 - test : 테스트 코드, 리펙토링 테스트 코드 추가
 - chore : 빌드 업무 수정, 패키지 매니저 수정
 
+<br>
+
 #### subject / body
 제목 / 본문
+
+<br>
 
 #### footer
 꼬리말은 optional이고 이슈 트래커 ID를 작성한다.
