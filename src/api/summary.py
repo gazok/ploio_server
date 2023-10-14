@@ -1,12 +1,13 @@
-from fastapi import FastAPI
+from fastapi import APIRouter
 
-from api import users, summary
-
-app = FastAPI()
-app.include_router(users.router)
-app.include_router(summary.router)
+router = APIRouter(prefix="/summary")
 
 
-@app.get("/")
-def api_check_handler():
-    return {"hello": "world"}
+@router.get("/security")
+def get_security_data():
+    return "hello sec"
+
+
+@router.get("/operation")
+def get_operation_data():
+    return "hello ops"
