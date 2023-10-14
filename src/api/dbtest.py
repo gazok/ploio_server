@@ -9,6 +9,8 @@ from database.connection import get_ploio_db
 repository = PloioRepository()
 
 
+# 로컬 디비 테스트 api (임시)
+
 @router.get("/dbtest")
 def db_test_handler(db: Session = Depends(get_ploio_db)):
     from database.orm import test  # test 모델을 가져옵니다.
