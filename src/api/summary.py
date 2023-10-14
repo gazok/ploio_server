@@ -1,5 +1,5 @@
-from fastapi import APIRouter
-
+from fastapi import APIRouter,Depends
+from service.summary import AgentService
 import json
 
 router = APIRouter(prefix="/summary")
@@ -13,8 +13,10 @@ def get_agent_tmp_data():
     return data
 
 
+
 @router.get("/security")
 def get_security_data():
+    agent_service: AgentService = Depends(),
     return "hello sec"
 
 
