@@ -12,7 +12,7 @@ app.include_router(summary.router)
 def api_check_handler():
     return {"hello": "world"}
 
-# @app.on_event("startup")
-# async def startup_event():
-#     agent_service = AgentService(agent_ip, agent_port)
-#     asyncio.create_task(agent_service.send_http_get_request())
+@app.on_event("startup")
+async def startup_event():
+    agent_service = AgentService(agent_ip, agent_port)
+    asyncio.create_task(agent_service.send_http_get_request())
