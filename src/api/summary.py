@@ -16,7 +16,7 @@ def get_agent_tmp_data():
 
 @router.get("/security")
 def get_security_data():
-    agent_service: AgentService = Depends(),
+    agent_service: AgentService = Depends()
     return "hello sec"
 
 
