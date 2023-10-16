@@ -4,28 +4,25 @@ import json
 import requests
 import struct
 
+from collections import deque
+
 app = FastAPI()
 
 agent_ip = "54.253.191.26"
 agent_port = "8080"
 
-parsed_data = []
-
-
-@app.on_event("startup")
-async def startup_event():
-    # fetching process를 fastapi 서버가 올라가는 동시에 실행
-    asyncio.create_task(fetching_process())
-
+parsed_data = deque(maxlen=100)  # 데이터를 저장할 큐, 최대 크기를 10으로 설정
 
 async def fetching_process():
+    print('helee')
     # 반복적으로 req를 보내고, reply를 파싱해서 공유변수 parsed_data에 저장
     while True:
+        print('while')
         agent_service = AgentService(agent_ip, agent_port)
-        response_content = agent_service.send_http_get_request()
+        response_content = await agent_service.send_http_get_request()
         data = agent_service.parse_data(response_content)
         print(data)
-        parsed_data = data # 리스트에 임시 저장. 근데 일정량이 차면 비워줘야 하는데 어떻게?
+        parsed_data.append(data) # 리스트에 임시 저장. 근데 일정량이 차면 비워줘야 하는데 어떻게?
 
 
 class AgentService:
@@ -36,7 +33,7 @@ class AgentService:
     # 지정 ip와 port로 http req를 보냄 (비동기)
     # 그런데 실제로는 모든 노드를 찾아서 보내야하는데 이걸 어떻게 구현할 것인가
     async def send_http_get_request(self):
-        response = requests.get(f"{self.agent_url}")
+        response = await requests.get(f"{self.agent_url}")
         return response.content
 
     # fetching process에서 쓰는 멤버함수.
