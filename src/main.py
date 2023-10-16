@@ -7,7 +7,7 @@ from fastapi.middleware.cors import CORSMiddleware
 app = FastAPI()
 app.include_router(user.router)
 app.include_router(summary.router)
-app.include_router(dbtest.router)
+# app.include_router(dbtest.router)
 origins = [
     "http://localhost/",
     "http://localhost:3000/"

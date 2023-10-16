@@ -1,10 +1,26 @@
+from fastapi import FastAPI
+import asyncio
 import json
-
 import requests
 import struct
 
+app = FastAPI()
+
 agent_ip = "54.253.191.26"
 agent_port = "8080"
+
+
+@app.on_event("startup")
+async def startup_event():
+    asyncio.create_task(fetching_process())
+
+
+async def fetching_process():
+    while True:
+        agent_service = AgentService(agent_ip, agent_port)
+        response_content = agent_service.send_http_get_request()
+        data = agent_service.parse_data(response_content)
+        print(data)
 
 
 class AgentService:
