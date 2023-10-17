@@ -13,6 +13,14 @@ BoB 12th ploio application server repository
 
 <br>
 
+## Agent Data Protocol
+
+> [PROTOCOL](https://github.com/gazok/ploio_agent/blob/master/docs/PROTOCOL.md)
+
+<br>
+
+---
+
 ## commit message convention
 
 ### commit message structure
