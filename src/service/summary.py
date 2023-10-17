@@ -59,8 +59,9 @@ class AgentService:
 
         for i in range(count_of_log):
             data = {}
-            unix_epoch, protocol, sip, dip, sport, dport, size = struct.unpack('>qi16s16shhi', bitstream[offset:offset+52])
-            
+            unix_epoch, protocol, sip, dip, sport, dport, size = struct.unpack('>qi16s16sHHi', bitstream[offset:offset+52])
+            print("s : ", sport)
+            print("d : ", dport)
             data["unix_epoch"] = unix_epoch
             data["protocol"] = protocol
             data["sip"] = sip.decode('utf-8')
