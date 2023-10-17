@@ -21,9 +21,13 @@ BoB 12th ploio application server repository
 
 ---
 
-## commit message convention
+## Docker Image
 
-### commit message structure
+[Click me](https://github.com/users/oxdjww/packages/container/package/ploio_server)
+
+## Commit Message Convention
+
+### Commit Message Structure
 
 ```
 type : subject
@@ -35,7 +39,7 @@ footer
 
 <br>
  
-#### type
+#### Type
 
 - add ： 파일 추가
 - feat : 새로운 기능 추가
@@ -48,12 +52,12 @@ footer
 
 <br>
 
-#### subject / body
+#### Subject / Body
 제목 / 본문
 
 <br>
 
-#### footer
+#### Footer
 꼬리말은 optional이고 이슈 트래커 ID를 작성한다.
 꼬리말은 "유형: #이슈 번호" 형식으로 사용한다.
 여러 개의 이슈 번호를 적을 때는 쉼표(,)로 구분한다.
