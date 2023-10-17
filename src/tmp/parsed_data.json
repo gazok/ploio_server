@@ -1,0 +1,34 @@
+{
+    "data": [
+        {
+            "src_ip": "127.0.0.1",
+            "src_port": 0,
+            "dst_ip": "127.0.0.1",
+            "dst_port": 0,
+            "data_len": 0,
+            "protocol": "TCP",
+            "timestamp": 1697535954
+        },
+        {
+            "src_ip": "127.0.0.1",
+            "src_port": 0,
+            "dst_ip": "127.0.0.1",
+            "dst_port": 0,
+            "data_len": 0,
+            "protocol": "TCP",
+            "timestamp": 1697535954
+        },
+        {
+            "src_ip": "127.0.0.1",
+            "src_port": 0,
+            "dst_ip": "127.0.0.1",
+            "dst_port": 0,
+            "data_len": 0,
+            "protocol": "TCP",
+            "timestamp": 1697535954
+        }
+    ],
+    "signature": "FROS",
+    "version": 1,
+    "count_of_log": 3
+}
