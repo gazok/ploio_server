@@ -10,7 +10,9 @@ router = APIRouter(prefix="/summary")
 # 프론트 테스트를 위한 임시 api
 @router.get("/tmp")
 def get_agent_tmp_data():
-    with open("tmp/agent.json", "r") as json_file:
+    # sample3.bin을 갖고 테스트한 내용 반환
+    # 아래 파일을 agent.json으로 바꾸면 초기 테스트용 파일을 볼 수 있음
+    with open("tmp/parsed_data.json", "r") as json_file:
         data = json.load(json_file)
     return data
 
