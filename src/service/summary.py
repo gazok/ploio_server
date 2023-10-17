@@ -23,7 +23,7 @@ async def fetching_process():
         with open("tmp/sample3.bin","rb") as file:
             bitstream = file.read()
         data = agent_service.parse_data(bitstream)
-        # print(data)
+        print("data : " ,data)
         parsed_data.append(data) # 리스트에 임시 저장. 근데 일정량이 차면 비워줘야 하는데 어떻게?
 
         await asyncio.sleep(2)
@@ -50,11 +50,11 @@ class AgentService:
         signature, version, count_of_log = struct.unpack('>4s4si', bitstream[:12])
 
 
-        print(bitstream[:12])
+
         log_data["signature"] = signature.decode('utf-8')  # 바이트를 문자열로 디코딩
         log_data["version"] = version.decode('utf-8')  # 바이트를 문자열로 디코딩
         log_data["count_of_log"] = count_of_log
-        print(log_data)
+
         offset = 12  # header size
         for i in range(count_of_log):
             data = {}
@@ -79,7 +79,7 @@ class AgentService:
         with open("tmp/parsed_data.json", 'w') as json_file:
             json.dump(log_data, json_file, indent=4)
 
-        return data
+        return log_data
     
     def check_protocol(self,protocol):
         if protocol == 6:
@@ -87,7 +87,7 @@ class AgentService:
         elif protocol == 17:
             protocol_type = 'UDP'
         elif protocol == 1:
-            protocol_type = 'ICMP'
+            protocol_type = 'Ipv4'
         return protocol_type
 
     def check_ip(self, ip_type, ip_hex):
