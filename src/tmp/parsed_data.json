@@ -1,25 +1,34 @@
 {
     "data": [
         {
-            "unix_epoch": 1697461898,
-            "protocol": 67074,
-            "sip": "\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0001\u0000\u0000\u007f",
-            "dip": "\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0001\u0000\u0000\u007f",
-            "sport": 43622,
-            "dport": 80,
-            "size": 582
+            "src_ip": "127.0.0.1",
+            "src_port": 0,
+            "dst_ip": "127.0.0.1",
+            "dst_port": 0,
+            "data_len": 0,
+            "protocol": "TCP",
+            "timestamp": 1697535954
         },
         {
-            "unix_epoch": 1697461898,
-            "protocol": 67074,
-            "sip": "\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0001\u0000\u0000\u007f",
-            "dip": "\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0001\u0000\u0000\u007f",
-            "sport": 80,
-            "dport": 43622,
-            "size": 174
+            "src_ip": "127.0.0.1",
+            "src_port": 0,
+            "dst_ip": "127.0.0.1",
+            "dst_port": 0,
+            "data_len": 0,
+            "protocol": "TCP",
+            "timestamp": 1697535954
+        },
+        {
+            "src_ip": "127.0.0.1",
+            "src_port": 0,
+            "dst_ip": "127.0.0.1",
+            "dst_port": 0,
+            "data_len": 0,
+            "protocol": "TCP",
+            "timestamp": 1697535954
         }
     ],
     "signature": "FROS",
     "version": "\u0001\u0000\u0000\u0000",
-    "count_of_log": 2
+    "count_of_log": 3
 }

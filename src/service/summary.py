@@ -20,7 +20,7 @@ async def fetching_process():
         agent_service = AgentService(agent_ip, agent_port)
         # response_content = await agent_service.send_http_get_request()
         # data = agent_service.parse_data(response_content)
-        with open("tmp/sample.bin","rb") as file:
+        with open("tmp/sample3.bin","rb") as file:
             bitstream = file.read()
         data = agent_service.parse_data(bitstream)
         # print(data)
@@ -55,20 +55,22 @@ class AgentService:
         log_data["version"] = version.decode('utf-8')  # 바이트를 문자열로 디코딩
         log_data["count_of_log"] = count_of_log
         print(log_data)
-        offset = 12  # 이미 읽은 바이트 수
-
+        offset = 12  # header size
         for i in range(count_of_log):
             data = {}
-            unix_epoch, protocol, sip, dip, sport, dport, size = struct.unpack('>qi16s16sHHi', bitstream[offset:offset+52])
-            print("s : ", sport)
-            print("d : ", dport)
-            data["unix_epoch"] = unix_epoch
-            data["protocol"] = protocol
-            data["sip"] = sip.decode('utf-8')
-            data["dip"] = dip.decode('utf-8')
-            data["sport"] = sport
-            data["dport"] = dport
-            data["size"] = size
+            unix_epoch, l2_protocol, l3_protocol, l7_protocol, sip, dip, sport, dport, size = struct.unpack('>qHBB16s16sHHi', bitstream[offset:offset+52])
+            # data["src_ip"] = sip.decode('utf-8')
+            data["src_ip"] = self.check_ip(1, sip)
+            data["src_port"] = sport
+            # data["dst_ip"] = dip.decode('utf-8')
+            data["dst_ip"] = self.check_ip(1, dip)
+            data["dst_port"] = dport
+            data["data_len"] = size
+            # data["l2_protocol"] = l2_protocol
+            # data["l3_protocol"] = l3_protocol
+            # data["l7_protocol"] = l7_protocol
+            data["protocol"] = self.check_protocol(l3_protocol)
+            data["timestamp"] = unix_epoch
 
             log_data["data"].append(data)
             print(data)
@@ -78,3 +80,18 @@ class AgentService:
             json.dump(log_data, json_file, indent=4)
 
         return data
+    
+    def check_protocol(self,protocol):
+        if protocol == 6:
+            protocol_type = 'TCP'
+        elif protocol == 17:
+            protocol_type = 'UDP'
+        elif protocol == 1:
+            protocol_type = 'ICMP'
+        return protocol_type
+
+    def check_ip(self, ip_type, ip_hex):
+        if ip_type == 1:
+            bytes_list = [ip_hex[i:i+4] for i in range(0, len(ip_hex), 4)]
+            ip_address = '.'.join([str(byte) for byte in bytes_list[0]])
+            return ip_address
