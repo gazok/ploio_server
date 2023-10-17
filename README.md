@@ -6,7 +6,7 @@ BoB 12th ploio application server repository
 ## Config
 
 - `python 3.11.4` <br>
-- IDE : `Pycharm` <br>
+- IDE : `Pycharm`, `VSCode` <br>
 - Framework : `FastAPI` <br>
 - Database : `MySQL` <br>
 - ORM : `Sqlalchemy` <br>
