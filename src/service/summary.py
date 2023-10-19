@@ -8,7 +8,8 @@ from collections import deque
 
 app = FastAPI()
 
-# 나중에 노드 순회해야함
+# 나중에 노드 순회해야함.
+# 워커노드
 agent_ip = "54.253.191.26"
 agent_port = "65001"
 
