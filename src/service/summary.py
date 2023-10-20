@@ -10,7 +10,7 @@ app = FastAPI()
 
 # 나중에 노드 순회해야함.
 # 워커노드
-agent_ip = "localhost"
+agent_ip = "54.253.191.26"
 agent_port = "65001"
 
 parsed_data = deque(maxlen=100)  # 데이터를 저장할 큐, 최대 크기를 10으로 설정
