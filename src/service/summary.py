@@ -10,7 +10,7 @@ app = FastAPI()
 
 # 나중에 노드 순회해야함.
 # 워커노드
-agent_ip = "54.253.191.26"
+agent_ip = "localhost"
 agent_port = "65001"
 
 parsed_data = deque(maxlen=100)  # 데이터를 저장할 큐, 최대 크기를 10으로 설정
@@ -19,7 +19,7 @@ async def fetching_process():
     # 반복적으로 req를 보내고, reply를 파싱해서 공유변수 parsed_data에 저장
     while True:
         agent_service = AgentService(agent_ip, agent_port)
-        response_content = await agent_service.send_http_get_request()
+        response_content = agent_service.send_http_get_request()
         data = agent_service.parse_data(response_content)
 
         # 아래 문단은 테스트용
@@ -41,8 +41,8 @@ class AgentService:
 
     # 지정 ip와 port로 http req를 보냄 (비동기)
     # 그런데 실제로는 모든 노드를 찾아서 보내야하는데 이걸 어떻게 구현할 것인가
-    async def send_http_get_request(self):
-        response = await requests.get(f"{self.agent_url}")
+    def send_http_get_request(self):
+        response = requests.get(f"{self.agent_url}")
         return response.content
 
     # fetching process에서 쓰는 멤버함수.
