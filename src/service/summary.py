@@ -36,13 +36,14 @@ async def fetching_process():
 
 class AgentService:
     # agent에 접근할 때 쓰일 서비스 클래스
-    def __init__(self, agent_ip, agent_port):
-        self.agent_url = f"http://{agent_ip}:{agent_port}"
+    def __init__(self):
+        pass
 
     # 지정 ip와 port로 http req를 보냄 (비동기)
     # 그런데 실제로는 모든 노드를 찾아서 보내야하는데 이걸 어떻게 구현할 것인가
-    def send_http_get_request(self):
-        response = requests.get(f"{self.agent_url}")
+    def send_http_get_request(self,agent_ip : str ,agent_port : str)->bytes:
+        agent_url = f"http://{agent_ip}:{agent_port}"
+        response = requests.get(f"{agent_url}")
         return response.content
 
     # fetching process에서 쓰는 멤버함수.
