@@ -1,0 +1,14 @@
+{
+  "pod1": {
+    "name": "pod_name",
+    "name_space": "namespace",
+    "ip": "ip.ip.ip.ip",
+    "danger_degree": "malicous"
+  },
+  "pod2": {
+    "name": "pod_name",
+    "name_space": "namespace",
+    "ip": "ip.ip.ip.ip",
+    "danger_degree": "secure"
+  }
+}
