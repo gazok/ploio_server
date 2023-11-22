@@ -1,17 +1,19 @@
 from fastapi import APIRouter, Depends
-from service.operation_service import Operation_service
+from model.service.operation_service import Operation_service
 import json
+import os
 
 router = APIRouter(prefix="/summary")
 
 operation_service = Operation_service()
 
 
-# 프론트 테스트를 위한 임시 api
 @router.get("/tmp/{filename}")
 def get_agent_tmp_data(filename: str):
+    file_path = os.path.join("tmp", f"{filename}.json")
+
     # 샘플 데이터 반환 (log_data.json, pod_data.json, traffic_data.json)
-    with open("tmp/{filename}.json", "r") as json_file:
+    with open(file_path, "r") as json_file:
         data = json.load(json_file)
     return data
 
