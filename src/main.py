@@ -1,13 +1,11 @@
 from fastapi import FastAPI
-from api import user, summary, dbtest
+from api import user, summary, dbtest, agents
 from fastapi.middleware.cors import CORSMiddleware
-
-import requests
-import asyncio
 
 app = FastAPI()
 app.include_router(user.router)
 app.include_router(summary.router)
+app.include_router(agents.router)
 # app.include_router(dbtest.router)
 origins = ["http://localhost/", "http://localhost:3000/"]
 app.add_middleware(
