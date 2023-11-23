@@ -2,7 +2,7 @@ from pydantic import BaseModel
 from typing import Dict, List
 
 
-class PodList(BaseModel):
+class PodItem(BaseModel):
     Name: str
     Namespace: str
     State: str
@@ -10,5 +10,5 @@ class PodList(BaseModel):
     Network: List[str]
 
 
-class PodItem(BaseModel):
-    pods: Dict[str, PodList]
+class PodList(BaseModel):
+    pods: Dict[str, PodItem]
