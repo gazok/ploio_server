@@ -4,11 +4,11 @@ from collections import deque
 
 app = FastAPI()
 
-from model.domain.Items import PacketList
-from model.domain.Items import PodList
-from model.domain.Items import LogList
+from model.domain.packet import PacketList, PacketItem
+from model.domain.pod import PodList
+from model.domain.log import LogList
 
-packet_data = deque(maxlen=100)
+packet_data = PacketList(data=[])
 pod_data = deque(maxlen=100)
 log_data = deque(maxlen=100)
 
@@ -19,18 +19,18 @@ class Agent_service:
     def __init__(self):
         pass
 
-    def save_packet_data(self, packet_list: PacketList):
-        result = {}
-        for packet_id, packet in packet_list.packets.items():
+    def save_packet_data(self, packet_dict: dict):
+        for packet_id, packet in packet_dict.items():
             # "Raw" 필드를 제외한 값들을 추출하여 새로운 딕셔너리에 추가
-            processed_packet = {
-                "Timestamp": packet.Timestamp,
-                "Source": packet.Source,
-                "Destination": packet.Destination,
-                "Size": packet.Size,
-            }
-
-            packet_data.append(processed_packet)
+            packet_data.data.append(
+                PacketItem(
+                    src_pod=packet["Source"],
+                    dst_pod=packet["Destination"],
+                    timestamp=packet["Timestamp"],
+                    data_len=packet["Size"],
+                )
+            )
+        return packet_data
 
     def save_pod_data(self, pod_list: PodList):
         pod_data.append(pod_list)

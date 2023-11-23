@@ -1,14 +1,13 @@
 from pydantic import BaseModel
-from typing import Dict
+from typing import List
 
 
 class PacketItem(BaseModel):
-    Timestamp: str
-    Source: str
-    Destination: str
-    Size: int
-    Raw: str
+    src_pod: str
+    dst_pod: str
+    timestamp: str
+    data_len: int
 
 
 class PacketList(BaseModel):
-    packets: Dict[str, PacketItem]
+    data: List[PacketItem]
