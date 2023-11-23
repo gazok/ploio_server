@@ -13,7 +13,8 @@ agent_service = Agent_service()
 
 @router.post("/packet")
 def rcv_packet_data(packet_list: dict):
-    return agent_service.save_packet_data(packet_list)
+    agent_service.save_packet_data(packet_list)
+    return HTTPStatus.OK
 
 
 @router.post("/pod")
