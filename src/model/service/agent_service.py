@@ -24,18 +24,49 @@ class Agent_service:
             # "Raw" 필드를 제외한 값들을 추출하여 새로운 딕셔너리에 추가
             packet_data.data.append(
                 PacketItem(
-                    src_pod=packet["Source"],
-                    dst_pod=packet["Destination"],
+                    src_pod=self.get_pod_info(packet["Source"]),
+                    dst_pod=self.get_pod_info(packet["Destination"]),
                     timestamp=packet["Timestamp"],
                     data_len=packet["Size"],
                 )
             )
+        print(packet_data)
         return packet_data
+
+    def get_pod_info(self, target_pod_id: str):
+        # 테스트용
+        # pod_data = {
+        #     "pods": [
+        #         {
+        #             "id": "pod-123",
+        #             "name": "pod_name",
+        #             "name_space": "namespace",
+        #             "ip": "ip.ip.ip.ip",
+        #             "danger_degree": "Information",
+        #             "message": "Partial service may be dead or attacked; or mannual health-check is recommended",
+        #         },
+        #         {
+        #             "id": "pod-456",
+        #             "name": "pod_name",
+        #             "name_space": "namespace",
+        #             "ip": "ip.ip.ip.ip",
+        #             "danger_degree": "Fail",
+        #             "message": "Partial service was dead or attacked; or should be checked mannually",
+        #         },
+        #     ]
+        # }
+
+        for pod in pod_data["pods"]:
+            if pod["id"] == target_pod_id:
+                return f"{pod['name']}:{pod['name_space']}"
+        else:
+            return f"Pod ID '{target_pod_id}' not found."
 
     def save_pod_data(self, pod_dict: dict):
         for pod_id, pod in pod_dict.items():
             pod_data.pods.append(
                 PodItem(
+                    id=pod_id,
                     name=pod["Name"],
                     name_space=pod["Namespace"],
                     ip=(pod["Network"])[0],
