@@ -5,11 +5,11 @@ from collections import deque
 app = FastAPI()
 
 from model.domain.packet import PacketList, PacketItem
-from model.domain.pod import PodList
+from model.domain.pod import PodList, PodItem
 from model.domain.log import LogList
 
 packet_data = PacketList(data=[])
-pod_data = deque(maxlen=100)
+pod_data = PodList(pods=[])
 log_data = deque(maxlen=100)
 
 malicious_pod = deque(maxlen=100)
@@ -32,8 +32,18 @@ class Agent_service:
             )
         return packet_data
 
-    def save_pod_data(self, pod_list: PodList):
-        pod_data.append(pod_list)
+    def save_pod_data(self, pod_dict: dict):
+        for pod_id, pod in pod_dict.items():
+            pod_data.pods.append(
+                PodItem(
+                    name=pod["Name"],
+                    name_space=pod["Namespace"],
+                    ip=(pod["Network"])[0],
+                    danger_degree="danger_degree",
+                    message="message",
+                )
+            )
+        return pod_data
 
     def save_log_data(self, log_list: LogList):
         malicious_packet = deque

@@ -3,12 +3,12 @@ from typing import Dict, List
 
 
 class PodItem(BaseModel):
-    Name: str
-    Namespace: str
-    State: str
-    CreatedAt: str
-    Network: List[str]
+    name: str
+    name_space: str
+    ip: str
+    danger_degree: str
+    message: str
 
 
 class PodList(BaseModel):
-    pods: Dict[str, PodItem]
+    pods: List[PodItem]
