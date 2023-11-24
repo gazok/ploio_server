@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends
 from model.service.operation_service import Operation_service
 import json
-import os
+from pathlib import Path
 
 router = APIRouter(prefix="/summary")
 
@@ -10,7 +10,7 @@ operation_service = Operation_service()
 
 @router.get("/tmp/{filename}")
 def get_agent_tmp_data(filename: str):
-    file_path = os.path.join("tmp", f"{filename}.json")
+    file_path = Path("tmp") / f"{filename}.json"
 
     # 샘플 데이터 반환 (log_data.json, pod_data.json, traffic_data.json)
     with open(file_path, "r") as json_file:
