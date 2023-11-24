@@ -30,12 +30,11 @@ class Agent_service:
                     data_len=packet["Size"],
                 )
             )
-        print(packet_data)
         return packet_data
 
     def get_pod_info(self, target_pod_id: str):
-        # 테스트용
-        # pod_data = {
+        # # 테스트용
+        # test_pod_data = {
         #     "pods": [
         #         {
         #             "id": "pod-123",
@@ -66,12 +65,12 @@ class Agent_service:
         for pod_id, pod in pod_dict.items():
             pod_data.pods.append(
                 PodItem(
-                    id=pod_id,
-                    name=pod["Name"],
-                    name_space=pod["Namespace"],
-                    ip=(pod["Network"])[0],
-                    danger_degree="danger_degree",
-                    message="message",
+                    pod_id,
+                    pod["Name"],
+                    pod["Namespace"],
+                    (pod["Network"])[0],
+                    "danger_degree",
+                    "message",
                 )
             )
         return pod_data
