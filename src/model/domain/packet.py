@@ -5,6 +5,7 @@ from typing import List
 
 @dataclass(frozen=True)
 class PacketItem(BaseModel):
+    packet_id: str
     src_pod: str
     dst_pod: str
     timestamp: str
