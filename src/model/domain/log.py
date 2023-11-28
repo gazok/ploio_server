@@ -3,7 +3,6 @@ from dataclasses import dataclass
 from typing import List
 
 
-@dataclass(frozen=True)
 class LogItem(BaseModel):
     packet_id: str
     src_pod: str
@@ -14,6 +13,5 @@ class LogItem(BaseModel):
     danger_message: str
 
 
-@dataclass(frozen=True)
 class LogList(BaseModel):
     logs: List[LogItem]
