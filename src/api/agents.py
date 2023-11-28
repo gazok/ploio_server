@@ -1,6 +1,7 @@
 from fastapi import APIRouter
 from http import HTTPStatus
 
+from model.domain.pod import PodList
 from model.service.agent_service import Agent_service
 
 router = APIRouter(prefix="/agents")
@@ -17,7 +18,7 @@ def rcv_packet_data(packet_list: dict):
 @router.post("/pod")
 def rcv_pod_data(pod_data: dict):
     agent_service.save_pod_data(pod_data)
-    return HTTPStatus.OK
+    # return HTTPStatus.OK
 
 
 @router.post("/log")

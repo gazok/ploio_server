@@ -1,6 +1,6 @@
 from model.service.agent_service import packet_data
 from model.service.agent_service import pod_data
-from model.service.agent_service import log_data
+from model.service.agent_service import notice_data
 from model.service.agent_service import malicious_pod
 
 
@@ -34,3 +34,9 @@ class Operation_service:
                 "danger_degree": danger_degree,
             }
         }
+    
+    def get_module_data(self):
+        return None
+    
+    def update_module_status(self):
+        return None
