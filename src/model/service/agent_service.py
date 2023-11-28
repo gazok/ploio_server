@@ -1,9 +1,9 @@
 from fastapi import FastAPI
-
 from collections import deque
+from fastapi import HTTPException, status
 
 app = FastAPI()
-
+from database.orm import Module
 from model.domain.packet import PacketList, PacketItem
 from model.domain.pod import PodList, PodItem
 from model.domain.notice import NoticeList, NoticeItem
@@ -148,3 +148,31 @@ class Agent_service:
                     saved_pod["danger_degree"] = log_pod.danger_degree
                     saved_pod["danger_message"] = log_pod.danger_message
         return notice_data
+
+    
+    def save_module_data(self, module_data: dict) -> Module:
+        try:
+            # module_data에 'id', 'name', 'description'가 있다고 가정합니다.
+            module = Module(
+                id=module_data['id'],
+                name=module_data['name'],
+                description=module_data['description']
+            )
+            self.create_module(module)
+            return module
+        except Exception as e:
+            # 에러를 출력하는 대신 로그에 기록하는 것이 좋습니다.
+            print("모듈 데이터 저장 중 오류:", e)
+            raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="모듈 데이터 저장 중 오류 발생")
+
+
+    def convert_json_to_modules(self, json_data):
+        modules = []
+        for module_data in json_data.get("modules", []):
+            module = Module(
+                id=module_data.get("GUID"),
+                name=module_data.get("Name"),
+                description=module_data.get("Description")
+            )
+            modules.append(module)
+        return modules
