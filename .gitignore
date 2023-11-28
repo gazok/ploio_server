@@ -1,3 +1,9 @@
+## Python
 .idea/
 venv/
 .pyc
+__pycache__/
+.cfg
+
+## Mac os
+.DS_Store
