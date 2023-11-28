@@ -1,14 +1,18 @@
 from pydantic import BaseModel
-from typing import Dict, List
+from dataclasses import dataclass
+from typing import List
 
 
-class PodList(BaseModel):
-    Name: str
-    Namespace: str
-    State: str
-    CreatedAt: str
-    Network: List[str]
-
-
+@dataclass(frozen=True)
 class PodItem(BaseModel):
-    pods: Dict[str, PodList]
+    id: str
+    name: str
+    name_space: str
+    ip: str
+    danger_degree: str
+    message: str
+
+
+@dataclass(frozen=True)
+class PodList(BaseModel):
+    pods: List[PodItem]
