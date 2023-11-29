@@ -1,0 +1,20 @@
+{
+  "packet-1": {
+    "Timestamp": "2023-11-03T10:27:51Z",
+    "Src": "src_pod_id",
+    "Dst": "dst_pod_id",
+    "Size": 12345678
+  },
+  "packet-2": {
+    "Timestamp": "2023-11-03T11:15:22Z",
+    "Src": "src_pod_id",
+    "Dst": "dst_pod_id",
+    "Size": 9876543
+  },
+  "packet-3": {
+    "Timestamp": "2023-11-03T13:45:10Z",
+    "Src": "src_pod_id",
+    "Dst": "dst_pod_id",
+    "Size": 55443322
+  }
+}

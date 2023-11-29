@@ -1,29 +1,33 @@
-from fastapi import APIRouter,Depends
-from service.summary import AgentService
+from fastapi import APIRouter, Depends
+from model.service.operation_service import Operation_service
 import json
-
-from service.summary import parsed_data
+from pathlib import Path
 
 router = APIRouter(prefix="/summary")
 
+operation_service = Operation_service()
 
-# 프론트 테스트를 위한 임시 api
-@router.get("/tmp")
-def get_agent_tmp_data():
-    # sample3.bin을 갖고 테스트한 내용 반환
-    # 아래 파일을 agent.json으로 바꾸면 초기 테스트용 파일을 볼 수 있음
-    with open("tmp/parsed_data.json", "r") as json_file:
+
+@router.get("/tmp/{filename}")
+def get_agent_tmp_data(filename: str):
+    file_path = Path("tmp") / f"{filename}.json"
+
+    # 샘플 데이터 반환 (log_data.json, pod_data.json, traffic_data.json)
+    with open(file_path, "r") as json_file:
         data = json.load(json_file)
     return data
 
 
-@router.get("/security")
-def get_security_data():
-     # service에서 초기화해주는 agent data buffer
-    return parsed_data
-
-
 @router.get("/operation")
 def get_operation_data():
-     # service에서 초기화해주는 agent data buffer
-    return parsed_data
+    return operation_service.get_packet_data()
+
+
+@router.get("/operation/{pod_namespace}/{pod_name}")
+def get_pod_data(pod_namespace: str, pod_name: str):
+    return operation_service.get_pod_info(pod_namespace, pod_name)
+
+
+@router.get("/operation/{edgeId}")
+def get_log_data():
+    return operation_service.get_packet_data()
