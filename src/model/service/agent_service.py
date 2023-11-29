@@ -3,7 +3,7 @@ from collections import deque
 from fastapi import HTTPException, status
 
 app = FastAPI()
-from database.orm import Module
+from database.connection import Module
 from model.domain.packet import PacketList, PacketItem
 from model.domain.pod import PodList, PodItem
 from model.domain.notice import NoticeList, NoticeItem

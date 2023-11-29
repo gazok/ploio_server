@@ -62,9 +62,3 @@ class Operation_service:
                 "danger_degree": danger_degree,
             }
         }
-    
-    def get_module_data(self):
-        return None
-    
-    def update_module_status(self):
-        return None

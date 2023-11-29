@@ -1,6 +1,5 @@
-from database.orm import Module
-from fastapi import Depends
-from fastapi import HTTPException, status
+from database.connection import Module
+from fastapi import Depends, HTTPException, status
 
 from sqlalchemy.orm import Session
 
@@ -19,7 +18,8 @@ class PloioRepository:
                 module = Module(
                     id=module_data.get('GUID', None),
                     name=module_data.get('Name', ''),
-                    description=module_data.get('Description', '')
+                    description=module_data.get('Description', ''),
+                    status=module_data.get('status', '')
                 )
                 created_modules.append(module)
                 db.add(module)

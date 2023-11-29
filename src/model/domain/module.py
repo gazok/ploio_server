@@ -6,7 +6,8 @@ class ModuleItem(BaseModel):
     GUID: str
     Name: str
     Description: str
+    Status: str
 
 
 class ModuleList(BaseModel):
-    data: List[ModuleItem]
+    modules: List[ModuleItem]

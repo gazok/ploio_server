@@ -14,6 +14,7 @@ class Module(Base):
     id = Column(String(50), primary_key=True, index=True)
     name = Column(String(255), index=True)
     description = Column(String(255))
+    status = Column(String(50))
 
 Base.metadata.create_all(bind=engine)
 
