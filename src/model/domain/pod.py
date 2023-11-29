@@ -3,7 +3,6 @@ from dataclasses import dataclass
 from typing import List
 
 
-@dataclass(frozen=True)
 class PodItem(BaseModel):
     id: str
     name: str
@@ -13,6 +12,5 @@ class PodItem(BaseModel):
     message: str
 
 
-@dataclass(frozen=True)
 class PodList(BaseModel):
     pods: List[PodItem]

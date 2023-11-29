@@ -6,11 +6,11 @@ app = FastAPI()
 
 from model.domain.packet import PacketList, PacketItem
 from model.domain.pod import PodList, PodItem
-from model.domain.log import LogList
+from model.domain.log import LogList, LogItem
 
 packet_data = PacketList(data=[])
 pod_data = PodList(pods=[])
-log_data = deque(maxlen=100)
+log_data = LogList(logs=[])
 
 malicious_pod = deque(maxlen=100)
 
@@ -24,6 +24,7 @@ class Agent_service:
             # "Raw" 필드를 제외한 값들을 추출하여 새로운 딕셔너리에 추가
             packet_data.data.append(
                 PacketItem(
+                    packet_id=self.get_pod_info(packet_id),
                     src_pod=self.get_pod_info(packet["Source"]),
                     dst_pod=self.get_pod_info(packet["Destination"]),
                     timestamp=packet["Timestamp"],
@@ -75,22 +76,35 @@ class Agent_service:
             )
         return pod_data
 
-    def save_log_data(self, log_list: LogList):
-        malicious_packet = deque
-        malicious_packet.extend(
-            log["Refs"][0]["Identifier"]
-            for log_id, log in log_list.items()
-            if log.get("Code", 0) >= 2
-        )
-        for packet in malicious_packet:
-            packet_id = packet["packet-id"]
-
-            # 예시 JSON 데이터에서 해당 패킷의 정보 가져오기
-            if packet_id in packet_data:
-                packet_info = packet_data[packet_id]
-
-                # packet-id에 해당하는 패킷의 Source와 Destination 가져오기
-                malicious_pod.append(packet_info["Source"])
-                malicious_pod.append(packet_info["Destination"])
-
-        return None
+    def save_log_data(self, log_list: dict):
+        # packet_sample = {
+        #     "data": [
+        #         {
+        #             "packet_id": "PCKT-001",
+        #             "src_pod": "default:front-end3",
+        #             "dst_pod": "default:api-server",
+        #             "timestamp": 12341234,
+        #             "data_len": 1024,
+        #         }
+        #     ]
+        # }
+        for log_id, log_entry in log_list.items():
+            code = log_entry.get("Code")
+            if code in ["Warning", "Fail", "Critical"]:
+                for ref in log_entry.get("Refs", []):
+                    if ref.get("Source") == "Packet":
+                        packet_id = ref.get("Identifier")
+                        for packet in packet_data["data"]:
+                            if packet["packet_id"] == packet_id:
+                                log_data.logs.append(
+                                    LogItem(
+                                        packet_id=packet_id,
+                                        src_pod=packet["src_pod"],
+                                        dst_pod=packet["dst_pod"],
+                                        timestamp=packet["timestamp"],
+                                        data_len=packet["data_len"],
+                                        danger_degree=code,
+                                        danger_message=log_entry.get("Message", ""),
+                                    )
+                                )
+        return log_data
