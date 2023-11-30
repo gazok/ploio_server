@@ -4,7 +4,7 @@ from sqlalchemy.ext.declarative import declarative_base
 
 DATABASE_URL = "mysql+pymysql://root:root@127.0.0.1:3306/ploio_db"
 engine = create_engine(DATABASE_URL)
-LocalSession = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+PLOIO_SESSION = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 Base = declarative_base()
 
@@ -34,7 +34,7 @@ Base.metadata.create_all(bind=engine)
 
 
 def get_ploio_db():
-    session = LocalSession()
+    session = PLOIO_SESSION()
     try:
         yield session
     finally:
