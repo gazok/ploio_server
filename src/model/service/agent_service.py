@@ -99,14 +99,3 @@ class Agent_service:
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 detail="모듈 데이터 저장 중 오류 발생",
             )
-
-    def convert_json_to_modules(self, json_data):
-        modules = []
-        for module_data in json_data.get("modules", []):
-            module = Module(
-                id=module_data.get("GUID"),
-                name=module_data.get("Name"),
-                description=module_data.get("Description"),
-            )
-            modules.append(module)
-        return modules
