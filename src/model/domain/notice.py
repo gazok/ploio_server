@@ -1,9 +1,8 @@
 from pydantic import BaseModel
-from dataclasses import dataclass
 from typing import List
 
 
-class LogItem(BaseModel):
+class NoticeItem(BaseModel):
     packet_id: str
     src_pod: str
     dst_pod: str
@@ -13,5 +12,5 @@ class LogItem(BaseModel):
     danger_message: str
 
 
-class LogList(BaseModel):
-    logs: List[LogItem]
+class NoticeList(BaseModel):
+    data: List[NoticeItem]
