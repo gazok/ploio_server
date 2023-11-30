@@ -73,14 +73,14 @@ class Agent_service:
                     id=pod_id,
                     name=pod["Name"],
                     name_space=pod["Namespace"],
-                    type= self.get_pod_label(pod["Name"]),
+                    type=self.get_pod_label(pod["Name"]),
                     ip=(pod["Network"])[0],
                     danger_degree="Trace",
                     danger_message="Trace symbol/mark",
                 )
             )
         return pod_data
-    
+
     def get_pod_label(self, pod_name: str):
         config.load_kube_config()
         v1 = client.CoreV1Api()
@@ -95,7 +95,6 @@ class Agent_service:
                 break
         else:
             print(f"Pod with name '{pod_name}' not found.")
-
 
     def save_module_data(self, module_data: dict) -> Module:
         try:
