@@ -15,13 +15,13 @@ ploio_repository = PloioRepository(session=Depends(get_ploio_db))
 
 @router.post("/packet")
 def rcv_packet_data(packet_list: dict):
-    return agent_service.save_packet_data(packet_list)
+    agent_service.save_packet_data(packet_list)
     return HTTPStatus.OK
 
 
 @router.post("/pod")
 def rcv_pod_data(pod_data: dict):
-    return agent_service.save_pod_data(pod_data)
+    agent_service.save_pod_data(pod_data)
     return HTTPStatus.OK
 
 
