@@ -17,10 +17,10 @@ def get_module_data(db: Session = Depends(get_ploio_db)):
     for module in module_list:
         module_data.modules.append(
             ModuleItem(
-                GUID="guidguid-guidguid-guid-guid",  # Replace with actual GUID
-                Name=module.name,
-                Description=module.description,
-                Status=module.status,
+                guid=module.id,
+                name=module.name,
+                description=module.description,
+                status=module.status,
             )
         )
 

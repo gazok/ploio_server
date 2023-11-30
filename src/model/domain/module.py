@@ -3,10 +3,10 @@ from typing import List
 
 
 class ModuleItem(BaseModel):
-    GUID: str
-    Name: str
-    Description: str
-    Status: str
+    guid: str
+    name: str
+    description: str
+    status: str
 
 
 class ModuleList(BaseModel):
