@@ -39,7 +39,7 @@ def update_module_status(request: dict, db: Session = Depends(get_ploio_db)):
 
             db.refresh(module)
 
-            return {"GUID": module.id, "status": module.status}
+            return {"guid": module.id, "status": module.status}
         else:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND, detail="Module not found"
