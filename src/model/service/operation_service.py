@@ -1,6 +1,5 @@
 from model.service.agent_service import packet_data
 from model.service.agent_service import pod_data
-from model.service.agent_service import notice_data
 from model.service.agent_service import malicious_pod
 
 
