@@ -35,7 +35,7 @@ def rcv_log_data(log_data: dict, db: Session = Depends(get_ploio_db)):
             "message": "log 데이터가 성공적으로 저장되었습니다",
         }
     except HTTPException as e:
-        return e
+        return {"code": e.status_code, "message": e.args[0]}
 
 
 @router.post("/module")
@@ -48,4 +48,4 @@ def rcv_module_data(module_data: dict, db: Session = Depends(get_ploio_db)):
             "message": "모듈 데이터가 성공적으로 저장되었습니다",
         }
     except HTTPException as e:
-        return e
+        return {"code": e.status_code, "message": e.args[0]}

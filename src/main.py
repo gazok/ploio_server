@@ -3,6 +3,7 @@ from api import user, summary, agents, notice, management
 from fastapi.middleware.cors import CORSMiddleware
 
 from database.connection import engine, Base
+
 app = FastAPI()
 app.include_router(user.router)
 app.include_router(summary.router)
