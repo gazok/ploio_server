@@ -1,3 +1,4 @@
+from fastapi import HTTPException, status
 from model.service.agent_service import packet_data
 from model.service.agent_service import pod_data
 from model.service.agent_service import malicious_pod
@@ -42,7 +43,9 @@ class Operation_service:
         for pod_info in pod_data.pods:
             if pod_info["name_space"] == pod_namespace and pod_info["name"] == pod_name:
                 return pod_info
-        return None
+        return HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Pod not found"
+        )
 
     def is_malicious_pod(self, pod_id):
         return pod_id in malicious_pod
