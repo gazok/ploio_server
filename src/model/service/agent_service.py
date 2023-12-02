@@ -1,16 +1,14 @@
 from fastapi import FastAPI
 from collections import deque
 from fastapi import HTTPException, status
-
-app = FastAPI()
 from database.connection import Module
 from model.domain.packet import PacketList, PacketItem
 from model.domain.pod import PodList, PodItem
-from model.domain.notice import NoticeList, NoticeItem
+
+app = FastAPI()
 
 packet_data = PacketList(data=[])
 pod_data = PodList(pods=[])
-notice_data = NoticeList(data=[])
 
 malicious_pod = deque(maxlen=100)
 
@@ -74,97 +72,33 @@ class Agent_service:
         for pod_id, pod in pod_dict.items():
             pod_data.pods.append(
                 PodItem(
-                    id = pod_id,
-                    name = pod["Name"],
-                    name_space = pod["Namespace"],
-                    ip = (pod["Network"])[0],
+                    id=pod_id,
+                    name=pod["Name"],
+                    name_space=pod["Namespace"],
+                    ip=(pod["Network"])[0],
                     danger_degree="Trace",
-                    danger_message="Trace symbol/mark"
+                    danger_message="Trace symbol/mark",
                 )
             )
         return pod_data
 
-    def save_log_data(self, log_list: dict):
-        # pod_sample = {
-        #     "pods": [
-        #         {
-        #             "id": "pod-123",
-        #             "name": "nginx-7d9f4df5b8-abc12",
-        #             "name_space": "default",
-        #             "ip": "192.168.1.10",
-        #             "danger_degree": "Trace",
-        #             "danger_message": "Trace symbol/mark"
-        #         },
-        #         {
-        #             "id": "pod-456",
-        #             "name": "redis-6a78bde9c1-xyz34",
-        #             "name_space": "app-namespace",
-        #             "ip": "172.16.0.8",
-        #             "danger_degree": "Trace",
-        #             "danger_message": "Trace symbol/mark"
-        #         },
-        #         {
-        #             "id": "pod-789",
-        #             "name": "mysql-2e8cfb1a3d-pqr56",
-        #             "name_space": "database",
-        #             "ip": "1.1.1.1",
-        #             "danger_degree": "Trace",
-        #             "danger_message": "Trace symbol/mark"
-        #         }
-        #     ]
-        # }
-        # packet_sample = {
-        #     "data": [
-        #         {
-        #             "packet_id": "pod-123",
-        #             "src_pod": "default:front-end3",
-        #             "dst_pod": "default:api-server",
-        #             "timestamp": "12341234",
-        #             "data_len": 1024,
-        #         }
-        #     ]
-        # }
-        for log_id, log_entry in log_list.items():
-            code = log_entry.get("Code")
-            if code in ["Warning", "Fail", "Critical"]:
-                for ref in log_entry.get("Refs", []):
-                    if ref.get("Source") == "Packet":
-                        packet_id = ref.get("Identifier")
-                        for packet in packet_data.data:
-                            notice_data.data.append(
-                                NoticeItem(
-                                    packet_id=packet_id,
-                                    src_pod=packet["src_pod"],
-                                    dst_pod=packet["dst_pod"],
-                                    timestamp=packet["timestamp"],
-                                    data_len=packet["data_len"],
-                                    danger_degree=code,
-                                    danger_message=log_entry.get("Message", ""),
-                                )
-                            )
-        for log_pod in notice_data.data:
-            for saved_pod in pod_data.pods:
-                if log_pod.packet_id == saved_pod["id"]:
-                    saved_pod["danger_degree"] = log_pod.danger_degree
-                    saved_pod["danger_message"] = log_pod.danger_message
-        return notice_data
-
-    
     def save_module_data(self, module_data: dict) -> Module:
         try:
             # module_data에 'id', 'name', 'description'가 있다고 가정합니다.
             module = Module(
-                id=module_data['id'],
-                name=module_data['name'],
-                description=module_data['description']
+                id=module_data["id"],
+                name=module_data["name"],
+                description=module_data["description"],
             )
             self.create_module(module)
             return module
         except Exception as e:
             # 에러를 출력하는 대신 로그에 기록하는 것이 좋습니다.
             print("모듈 데이터 저장 중 오류:", e)
-            raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="모듈 데이터 저장 중 오류 발생")
-
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail="모듈 데이터 저장 중 오류 발생",
+            )
 
     def convert_json_to_modules(self, json_data):
         modules = []
@@ -172,7 +106,7 @@ class Agent_service:
             module = Module(
                 id=module_data.get("GUID"),
                 name=module_data.get("Name"),
-                description=module_data.get("Description")
+                description=module_data.get("Description"),
             )
             modules.append(module)
         return modules
