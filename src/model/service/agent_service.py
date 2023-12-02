@@ -73,7 +73,7 @@ class Agent_service:
                     id=pod_id,
                     name=pod["Name"],
                     name_space=pod["Namespace"],
-                    type=self.get_pod_label(pod["Name"]),
+                    type=self.get_pod_container_name(pod["Name"], pod["Namespace"]),
                     ip=(pod["Network"])[0],
                     danger_degree="Trace",
                     danger_message="Trace symbol/mark",
@@ -81,24 +81,20 @@ class Agent_service:
             )
         return pod_data
 
-    def get_pod_label(self, pod_name: str):
+    def get_pod_container_name(self, pod_name: str, pod_namespace: str):
         config.load_kube_config()
-        v1 = client.CoreV1Api()
-        pod_list = v1.list_pod_for_all_namespaces().items
-        for pod in pod_list:
-            if pod.metadata.name == pod_name:
-                app_label_value = pod.metadata.labels.get("app")
-                if app_label_value is not None:
-                    return app_label_value
-                else:
-                    print(f"Pod '{pod_name}' does not have 'app' label.")
-                break
-        else:
-            print(f"Pod with name '{pod_name}' not found.")
+        api_instance = client.CoreV1Api()
+        try:
+            pod_info = api_instance.read_namespaced_pod(
+                name=pod_name, namespace=pod_namespace
+            )
+
+            return pod_info.spec.containers[0].image
+        except client.ApiException as e:
+            return {"pod 정보 fetch 중 오류 발생: {e.args[0]}"}
 
     def save_module_data(self, module_data: dict) -> Module:
         try:
-            # module_data에 'id', 'name', 'description'가 있다고 가정합니다.
             module = Module(
                 id=module_data["id"],
                 name=module_data["name"],
@@ -107,7 +103,6 @@ class Agent_service:
             self.create_module(module)
             return module
         except Exception as e:
-            # 에러를 출력하는 대신 로그에 기록하는 것이 좋습니다.
             print("모듈 데이터 저장 중 오류:", e)
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
