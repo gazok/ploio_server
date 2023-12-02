@@ -73,7 +73,7 @@ class Agent_service:
                     id=pod_id,
                     name=pod["Name"],
                     name_space=pod["Namespace"],
-                    type=self.get_pod_container_name(pod["Name"], pod["Namespace"]),
+                    type=self.get_pod_type(pod["Name"], pod["Namespace"]),
                     ip=(pod["Network"])[0],
                     danger_degree="Trace",
                     danger_message="Trace symbol/mark",
@@ -81,17 +81,27 @@ class Agent_service:
             )
         return pod_data
 
-    def get_pod_container_name(self, pod_name: str, pod_namespace: str):
+    def get_pod_type(self, pod_name: str, pod_namespace: str):
+        pod_port = self.get_pod_ports(pod_name, pod_namespace)
+        server_port = [53, 9153, 443, 8000, 80, 6379]
+        database_port = [27017, 3306]
+        if pod_port in server_port:
+            return "server"
+        if pod_port in database_port:
+            return "database"
+        return None
+
+    def get_pod_ports(self, pod_name: str, pod_namespace: str):
         config.load_kube_config()
         api_instance = client.CoreV1Api()
         try:
-            pod_info = api_instance.read_namespaced_pod(
+            pod = api_instance.read_namespaced_pod(
                 name=pod_name, namespace=pod_namespace
             )
+            return pod.spec.containers[0]["ports"][0]["container_port"]
 
-            return pod_info.spec.containers[0].image
-        except client.ApiException as e:
-            return {"pod 정보 fetch 중 오류 발생: {e.args[0]}"}
+        except Exception as e:
+            print(f"Error fetching pod information: {str(e)}")
 
     def save_module_data(self, module_data: dict) -> Module:
         try:
