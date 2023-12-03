@@ -7,7 +7,7 @@ from kubernetes import config, client
 
 app = FastAPI()
 
-packet_data = PacketList(data=[])
+packet_data = PacketList(packets=[])
 pod_data = PodList(pods=[])
 
 
