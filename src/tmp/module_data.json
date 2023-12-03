@@ -1,0 +1,22 @@
+{
+  "modules": [
+    {
+      "GUID": "guidguid-guidguid-guid-guid",
+      "Name": "module.so",
+      "Description": "descdescdesc",
+      "status": "active"
+    },
+    {
+      "GUID": "guidguid-guidguid-guid-guid",
+      "Name": "module.so",
+      "Description": "descdescdesc",
+      "status": "inactive"
+    },
+    {
+      "GUID": "guidguid-guidguid-guid-guid",
+      "Name": "module.so",
+      "Description": "descdescdesc",
+      "status": "active"
+    }
+  ]
+}
