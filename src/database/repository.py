@@ -41,52 +41,52 @@ class PloioRepository:
             )
 
     def create_notice(self, log_list: dict, db: Session):
-        # pod_sample = {
-        #     "pods": [
-        #         {
-        #             "id": "pod-123",
-        #             "name": "nginx-7d9f4df5b8-abc12",
-        #             "name_space": "default",
-        #             "ip": "192.168.1.10",
-        #             "danger_degree": "Trace",
-        #             "danger_message": "Trace symbol/mark",
-        #         },
-        #         {
-        #             "id": "pod-456",
-        #             "name": "redis-6a78bde9c1-xyz34",
-        #             "name_space": "app-namespace",
-        #             "ip": "172.16.0.8",
-        #             "danger_degree": "Trace",
-        #             "danger_message": "Trace symbol/mark",
-        #         },
-        #         {
-        #             "id": "pod-789",
-        #             "name": "mysql-2e8cfb1a3d-pqr56",
-        #             "name_space": "database",
-        #             "ip": "1.1.1.1",
-        #             "danger_degree": "Trace",
-        #             "danger_message": "Trace symbol/mark",
-        #         },
-        #     ]
-        # }
-        # packet_sample = {
-        #     "data": [
-        #         {
-        #             "packet_id": "pkt-1",
-        #             "src_pod": "default:pod-1",
-        #             "dst_pod": "default:api-server1",
-        #             "timestamp": "12341234",
-        #             "data_len": 1024,
-        #         },
-        #         {
-        #             "packet_id": "pkt-2",
-        #             "src_pod": "default:pod-2",
-        #             "dst_pod": "default:api-server2",
-        #             "timestamp": "456564",
-        #             "data_len": 512,
-        #         },
-        #     ]
-        # }
+        pod_sample = {
+            "pods": [
+                {
+                    "id": "pod-123",
+                    "name": "nginx-7d9f4df5b8-abc12",
+                    "name_space": "default",
+                    "ip": "192.168.1.10",
+                    "danger_degree": "Trace",
+                    "danger_message": "Trace symbol/mark",
+                },
+                {
+                    "id": "pod-456",
+                    "name": "redis-6a78bde9c1-xyz34",
+                    "name_space": "app-namespace",
+                    "ip": "172.16.0.8",
+                    "danger_degree": "Trace",
+                    "danger_message": "Trace symbol/mark",
+                },
+                {
+                    "id": "pod-789",
+                    "name": "mysql-2e8cfb1a3d-pqr56",
+                    "name_space": "database",
+                    "ip": "1.1.1.1",
+                    "danger_degree": "Trace",
+                    "danger_message": "Trace symbol/mark",
+                },
+            ]
+        }
+        packet_sample = {
+            "data": [
+                {
+                    "packet_id": "pkt-1",
+                    "src_pod": "default:pod-1",
+                    "dst_pod": "default:api-server1",
+                    "timestamp": "12341234",
+                    "data_len": 1024,
+                },
+                {
+                    "packet_id": "pkt-2",
+                    "src_pod": "default:pod-2",
+                    "dst_pod": "default:api-server2",
+                    "timestamp": "456564",
+                    "data_len": 512,
+                },
+            ]
+        }
         created_notices = []
 
         for log_id, log_entry in log_list.items():
@@ -94,7 +94,7 @@ class PloioRepository:
 
             if code in ["Warning", "Fail", "Critical"]:
                 self.process_notices_with_log(
-                    log_entry, packet_data, created_notices, db
+                    log_entry, packet_sample, created_notices, db
                 )
 
         db.commit()
@@ -124,7 +124,7 @@ class PloioRepository:
         return ref.get("Identifier", "None")
 
     def find_packet_info(self, packet_data, malicious_packet_id):
-        for packet in packet_data.data:
+        for packet in packet_data.packets:
             if packet["packet_id"] == malicious_packet_id:
                 return packet
 

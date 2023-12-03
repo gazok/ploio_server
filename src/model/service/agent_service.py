@@ -1,16 +1,14 @@
 from fastapi import FastAPI
-from collections import deque
 from fastapi import HTTPException, status
 from database.connection import Module
 from model.domain.packet import PacketList, PacketItem
 from model.domain.pod import PodList, PodItem
+from kubernetes import config, client
 
 app = FastAPI()
 
-packet_data = PacketList(data=[])
+packet_data = PacketList(packets=[])
 pod_data = PodList(pods=[])
-
-malicious_pod = deque(maxlen=100)
 
 
 class Agent_service:
@@ -75,6 +73,7 @@ class Agent_service:
                     id=pod_id,
                     name=pod["Name"],
                     name_space=pod["Namespace"],
+                    type=self.get_pod_type(pod["Name"], pod["Namespace"]),
                     ip=(pod["Network"])[0],
                     danger_degree="Trace",
                     danger_message="Trace symbol/mark",
@@ -82,9 +81,30 @@ class Agent_service:
             )
         return pod_data
 
+    def get_pod_type(self, pod_name: str, pod_namespace: str):
+        pod_port = self.get_pod_ports(pod_name, pod_namespace)
+        server_port = [53, 9153, 443, 8000, 80, 6379]
+        database_port = [27017, 3306]
+        if pod_port in server_port:
+            return "server"
+        if pod_port in database_port:
+            return "database"
+        return None
+
+    def get_pod_ports(self, pod_name: str, pod_namespace: str):
+        config.load_kube_config()
+        api_instance = client.CoreV1Api()
+        try:
+            pod = api_instance.read_namespaced_pod(
+                name=pod_name, namespace=pod_namespace
+            )
+            return pod.spec.containers[0]["ports"][0]["container_port"]
+
+        except Exception as e:
+            print(f"Error fetching pod information: {str(e)}")
+
     def save_module_data(self, module_data: dict) -> Module:
         try:
-            # module_data에 'id', 'name', 'description'가 있다고 가정합니다.
             module = Module(
                 id=module_data["id"],
                 name=module_data["name"],
@@ -93,20 +113,8 @@ class Agent_service:
             self.create_module(module)
             return module
         except Exception as e:
-            # 에러를 출력하는 대신 로그에 기록하는 것이 좋습니다.
             print("모듈 데이터 저장 중 오류:", e)
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 detail="모듈 데이터 저장 중 오류 발생",
             )
-
-    def convert_json_to_modules(self, json_data):
-        modules = []
-        for module_data in json_data.get("modules", []):
-            module = Module(
-                id=module_data.get("GUID"),
-                name=module_data.get("Name"),
-                description=module_data.get("Description"),
-            )
-            modules.append(module)
-        return modules

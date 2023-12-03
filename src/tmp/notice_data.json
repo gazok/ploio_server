@@ -1,0 +1,22 @@
+{
+  "data": [
+    {
+      "packet_id": "DASfsdfsda",
+      "src_pod": "namespace:name",
+      "dst_pod": "namespace:name",
+      "timestamp": "2023231231~~",
+      "data_len": 1024,
+      "danger_degree": "Fail",
+      "danger_message": "dsfasdfasd"
+    },
+    {
+      "packet_id": "DASfsdfsda",
+      "src_pod": "namespace:name",
+      "dst_pod": "namespace:name",
+      "timestamp": "2023231231~~",
+      "data_len": 1024,
+      "danger_degree": "Fail",
+      "danger_message": "dsfasdfasd"
+    }
+  ]
+}

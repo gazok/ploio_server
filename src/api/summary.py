@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter
 from model.service.operation_service import Operation_service
 import json
 from pathlib import Path
@@ -23,7 +23,7 @@ def get_operation_data():
     return operation_service.get_packet_data()
 
 
-@router.get("/operation/{pod_namespace}/{pod_name}")
+@router.get("/operation/pods")
 def get_pod_data(pod_namespace: str, pod_name: str):
     return operation_service.get_pod_info(pod_namespace, pod_name)
 
