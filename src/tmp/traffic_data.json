@@ -1,20 +1,39 @@
 {
-  "packet-1": {
-    "Timestamp": "2023-11-03T10:27:51Z",
-    "Src": "src_pod_id",
-    "Dst": "dst_pod_id",
-    "Size": 12345678
-  },
-  "packet-2": {
-    "Timestamp": "2023-11-03T11:15:22Z",
-    "Src": "src_pod_id",
-    "Dst": "dst_pod_id",
-    "Size": 9876543
-  },
-  "packet-3": {
-    "Timestamp": "2023-11-03T13:45:10Z",
-    "Src": "src_pod_id",
-    "Dst": "dst_pod_id",
-    "Size": 55443322
-  }
+  "data": [
+    {
+      "packet_id": "PCKT-001",
+      "src_pod": "default:front-end3",
+      "dst_pod": "default:api-server",
+      "timestamp": 12341234,
+      "data_len": 1024
+    },
+    {
+      "packet_id": "PCKT-001",
+      "src_pod": "default:postgres",
+      "dst_pod": "ireonu:nginx",
+      "timestamp": 12341234,
+      "data_len": 1024
+    },
+    {
+      "packet_id": "PCKT-001",
+      "src_pod": "default:api-server",
+      "dst_pod": "default:db",
+      "timestamp": 12341234,
+      "data_len": 512
+    },
+    {
+      "packet_id": "PCKT-001",
+      "src_pod": "default:web-app",
+      "dst_pod": "kube-system:metrics-server",
+      "timestamp": 12341234,
+      "data_len": 2048
+    },
+    {
+      "packet_id": "PCKT-001",
+      "src_pod": "kube-system:coredns",
+      "dst_pod": "default:api-server",
+      "timestamp": 12341234,
+      "data_len": 1024
+    }
+  ]
 }

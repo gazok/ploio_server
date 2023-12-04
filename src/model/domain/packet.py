@@ -1,5 +1,4 @@
 from pydantic import BaseModel
-from dataclasses import dataclass
 from typing import List
 
 
@@ -12,4 +11,4 @@ class PacketItem(BaseModel):
 
 
 class PacketList(BaseModel):
-    data: List[PacketItem]
+    packets: List[PacketItem]

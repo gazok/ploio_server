@@ -1,5 +1,4 @@
 from pydantic import BaseModel
-from dataclasses import dataclass
 from typing import List
 
 
@@ -7,9 +6,10 @@ class PodItem(BaseModel):
     id: str
     name: str
     name_space: str
+    type: str
     ip: str
     danger_degree: str
-    message: str
+    danger_message: str
 
 
 class PodList(BaseModel):
