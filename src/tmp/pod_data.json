@@ -1,14 +1,31 @@
 {
-  "pod1": {
-    "name": "pod_name",
-    "name_space": "namespace",
-    "ip": "ip.ip.ip.ip",
-    "danger_degree": "malicous"
-  },
-  "pod2": {
-    "name": "pod_name",
-    "name_space": "namespace",
-    "ip": "ip.ip.ip.ip",
-    "danger_degree": "secure"
-  }
+  "pods": [
+    {
+      "id": "pod-123",
+      "name": "pod_name1",
+      "name_space": "namespace1",
+      "type": "server",
+      "ip": "ip.ip.ip.ip1",
+      "danger_degree": "Information",
+      "message": "Partial service may be dead or attacked; or mannual health-check is recommended"
+    },
+    {
+      "id": "pod-456",
+      "name": "pod_name2",
+      "name_space": "namespace2",
+      "type": "database",
+      "ip": "ip.ip.ip.ip2",
+      "danger_degree": "Fail",
+      "message": "Partial service was dead or attacked; or should be checked mannually"
+    },
+    {
+      "id": "pod-789",
+      "name": "pod_name3",
+      "name_space": "namespace3",
+      "type": "database",
+      "ip": "ip.ip.ip.ip",
+      "danger_degree": "Fail",
+      "message": "Partial service was dead or attacked; or should be checked mannually"
+    }
+  ]
 }

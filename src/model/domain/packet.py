@@ -11,4 +11,4 @@ class PacketItem(BaseModel):
 
 
 class PacketList(BaseModel):
-    data: List[PacketItem]
+    packets: List[PacketItem]
