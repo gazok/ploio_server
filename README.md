@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 # Intro
 
 ## [차세대 보안리더 양성 프로그램 Best of the Best 12기](https://www.kitribob.kr/) 교육과정 팀프로젝트
@@ -18,11 +19,17 @@
 <br>
 
 =======
+=======
+>>>>>>> feat/notice-analysis
 # ploio_server
 
 BoB 12th ploio application server repository
  
+<<<<<<< HEAD
 >>>>>>> dev
+=======
+>>>>>>> origin/feat/notice
+>>>>>>> feat/notice-analysis
 ## Config
 
 - `python 3.11.4`

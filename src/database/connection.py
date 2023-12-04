@@ -1,8 +1,11 @@
-from sqlalchemy import create_engine, Column, String, Integer
+from sqlalchemy import create_engine, Column, String, Integer, DateTime
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.sql import func
+import os
 
-DATABASE_URL = "mysql+pymysql://root:root@127.0.0.1:3306/ploio_db"
+# DATABASE_URL = "mysql+pymysql://root:root@127.0.0.1:3306/ploio_db"
+DATABASE_URL = os.getenv("DATABASE_URL")
 engine = create_engine(DATABASE_URL)
 PLOIO_SESSION = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
@@ -24,7 +27,7 @@ class Notice(Base):
     packet_id = Column(String(50), primary_key=True, index=True)
     src_pod = Column(String(255))
     dst_pod = Column(String(255))
-    timestamp = Column(String(255))
+    timestamp = Column(DateTime(timezone=True), server_default=func.now())
     data_len = Column(Integer)
     danger_degree = Column(String(255))
     danger_message = Column(String(255))
