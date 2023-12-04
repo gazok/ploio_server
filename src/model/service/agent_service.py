@@ -1,16 +1,14 @@
 from fastapi import FastAPI
-
 from collections import deque
+from fastapi import HTTPException, status
+from database.connection import Module
+from model.domain.packet import PacketList, PacketItem
+from model.domain.pod import PodList, PodItem
 
 app = FastAPI()
 
-from model.domain.packet import PacketList, PacketItem
-from model.domain.pod import PodList, PodItem
-from model.domain.log import LogList, LogItem
-
 packet_data = PacketList(data=[])
 pod_data = PodList(pods=[])
-log_data = LogList(logs=[])
 
 malicious_pod = deque(maxlen=100)
 
@@ -24,7 +22,7 @@ class Agent_service:
             # "Raw" 필드를 제외한 값들을 추출하여 새로운 딕셔너리에 추가
             packet_data.data.append(
                 PacketItem(
-                    packet_id=self.get_pod_info(packet_id),
+                    packet_id=packet_id,
                     src_pod=self.get_pod_info(packet["Source"]),
                     dst_pod=self.get_pod_info(packet["Destination"]),
                     timestamp=packet["Timestamp"],
@@ -39,24 +37,32 @@ class Agent_service:
         #     "pods": [
         #         {
         #             "id": "pod-123",
-        #             "name": "pod_name",
-        #             "name_space": "namespace",
-        #             "ip": "ip.ip.ip.ip",
+        #             "name": "pod_name123",
+        #             "name_space": "namespace23",
+        #             "ip": "ip.ip.ip.ip1",
         #             "danger_degree": "Information",
         #             "message": "Partial service may be dead or attacked; or mannual health-check is recommended",
         #         },
         #         {
-        #             "id": "pod-456",
-        #             "name": "pod_name",
-        #             "name_space": "namespace",
-        #             "ip": "ip.ip.ip.ip",
+        #             "id": "pod-002",
+        #             "name": "pod_name456",
+        #             "name_space": "namespace456",
+        #             "ip": "ip.ip.ip.ip2",
         #             "danger_degree": "Fail",
         #             "message": "Partial service was dead or attacked; or should be checked mannually",
+        #         },
+        #         {
+        #             "id": "pod-001",
+        #             "name": "pod_name890",
+        #             "name_space": "namespace890",
+        #             "ip": "ip.ip.ip.ip3",
+        #             "danger_degree": "?",
+        #             "message": "Partial servicasdfsdshould be checked mannually",
         #         },
         #     ]
         # }
 
-        for pod in pod_data["pods"]:
+        for pod in pod_data.pods:
             if pod["id"] == target_pod_id:
                 return f"{pod['name']}:{pod['name_space']}"
         else:
@@ -66,45 +72,41 @@ class Agent_service:
         for pod_id, pod in pod_dict.items():
             pod_data.pods.append(
                 PodItem(
-                    pod_id,
-                    pod["Name"],
-                    pod["Namespace"],
-                    (pod["Network"])[0],
-                    "danger_degree",
-                    "message",
+                    id=pod_id,
+                    name=pod["Name"],
+                    name_space=pod["Namespace"],
+                    ip=(pod["Network"])[0],
+                    danger_degree="Trace",
+                    danger_message="Trace symbol/mark",
                 )
             )
         return pod_data
 
-    def save_log_data(self, log_list: dict):
-        # packet_sample = {
-        #     "data": [
-        #         {
-        #             "packet_id": "PCKT-001",
-        #             "src_pod": "default:front-end3",
-        #             "dst_pod": "default:api-server",
-        #             "timestamp": 12341234,
-        #             "data_len": 1024,
-        #         }
-        #     ]
-        # }
-        for log_id, log_entry in log_list.items():
-            code = log_entry.get("Code")
-            if code in ["Warning", "Fail", "Critical"]:
-                for ref in log_entry.get("Refs", []):
-                    if ref.get("Source") == "Packet":
-                        packet_id = ref.get("Identifier")
-                        for packet in packet_data["data"]:
-                            if packet["packet_id"] == packet_id:
-                                log_data.logs.append(
-                                    LogItem(
-                                        packet_id=packet_id,
-                                        src_pod=packet["src_pod"],
-                                        dst_pod=packet["dst_pod"],
-                                        timestamp=packet["timestamp"],
-                                        data_len=packet["data_len"],
-                                        danger_degree=code,
-                                        danger_message=log_entry.get("Message", ""),
-                                    )
-                                )
-        return log_data
+    def save_module_data(self, module_data: dict) -> Module:
+        try:
+            # module_data에 'id', 'name', 'description'가 있다고 가정합니다.
+            module = Module(
+                id=module_data["id"],
+                name=module_data["name"],
+                description=module_data["description"],
+            )
+            self.create_module(module)
+            return module
+        except Exception as e:
+            # 에러를 출력하는 대신 로그에 기록하는 것이 좋습니다.
+            print("모듈 데이터 저장 중 오류:", e)
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail="모듈 데이터 저장 중 오류 발생",
+            )
+
+    def convert_json_to_modules(self, json_data):
+        modules = []
+        for module_data in json_data.get("modules", []):
+            module = Module(
+                id=module_data.get("GUID"),
+                name=module_data.get("Name"),
+                description=module_data.get("Description"),
+            )
+            modules.append(module)
+        return modules
