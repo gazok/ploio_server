@@ -2,8 +2,10 @@ from sqlalchemy import create_engine, Column, String, Integer, DateTime
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.sql import func
+import os
 
-DATABASE_URL = "mysql+pymysql://root:root@127.0.0.1:3306/ploio_db"
+# DATABASE_URL = "mysql+pymysql://root:root@127.0.0.1:3306/ploio_db"
+DATABASE_URL = os.getenv("DATABASE_URL")
 engine = create_engine(DATABASE_URL)
 PLOIO_SESSION = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
