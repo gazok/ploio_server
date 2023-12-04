@@ -18,7 +18,7 @@ class Agent_service:
     def save_packet_data(self, packet_dict: dict):
         for packet_id, packet in packet_dict.items():
             # "Raw" 필드를 제외한 값들을 추출하여 새로운 딕셔너리에 추가
-            packet_data.data.append(
+            packet_data.packets.append(
                 PacketItem(
                     packet_id=packet_id,
                     src_pod=self.get_pod_info(packet["Source"]),

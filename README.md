@@ -2,6 +2,7 @@
 
 BoB 12th ploio application server repository
  
+>>>>>>> origin/feat/notice
 ## Config
 
 - `python 3.11.4`
