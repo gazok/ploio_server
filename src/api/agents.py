@@ -3,7 +3,7 @@ from http import HTTPStatus
 from sqlalchemy.orm import Session
 from model.service.agent_service import Agent_service
 from database.repository import PloioRepository
-from database.connection import get_ploio_db
+from database.connection import get_ploio_db, Module
 from fastapi import HTTPException
 
 
@@ -38,14 +38,14 @@ def rcv_log_data(log_data: dict, db: Session = Depends(get_ploio_db)):
         return {"code": e.status_code, "message": e.args[0]}
 
 
-@router.post("/module")
-def rcv_module_data(module_data: dict, db: Session = Depends(get_ploio_db)):
+@router.post("/activation")
+def return_module_status(request: dict, db: Session = Depends(get_ploio_db)):
     try:
-        modules = ploio_repository.create_modules(module_data, db=db)
+        guid = request["guid"]
+        module = db.query(Module).filter(Module.guid == guid).first()
         return {
-            "status": HTTPStatus.OK,
-            "modules": modules,
-            "message": "모듈 데이터가 성공적으로 저장되었습니다",
+            "guid": module.guid,
+            "status": module.status
         }
     except HTTPException as e:
         return {"code": e.status_code, "message": e.args[0]}
