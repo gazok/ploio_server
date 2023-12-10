@@ -44,19 +44,20 @@ def get_ploio_db():
     finally:
         session.close()
 
+
 def insert_default_modules(db: Session = Depends(get_ploio_db)):
     try:
         module1 = Module(
             guid="a41bf61a-aa05-40b5-b8a1-252a9884e768",
             name="ssh",
             description="Module that detects that ssh connection attempts per second increase by a certain level.",
-            status="inactive"
+            status="inactive",
         )
         module2 = Module(
             guid="c9478e3c-0c5b-4eac-815a-c5682263574f",
             name="log4j",
             description="log4j4j4j4j4j4j",
-            status="inactive"
+            status="inactive",
         )
 
         db.add_all([module1, module2])

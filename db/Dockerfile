@@ -1,0 +1,8 @@
+FROM mysql:latest
+
+ENV MYSQL_ROOT_PASSWORD=pass
+ENV MYSQL_DATABASE=ploio_db
+
+EXPOSE 3306
+
+CMD ["mysqld"]

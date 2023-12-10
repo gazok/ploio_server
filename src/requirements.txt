@@ -2,3 +2,5 @@ uvicorn
 fastapi
 kubernetes
 sqlalchemy
+mysql
+pymysql
