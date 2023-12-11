@@ -17,7 +17,10 @@ RUN service mariadb start && mariadb -u root -proot -e "CREATE USER 'root'@'%' I
 RUN service mariadb start && mariadb -u root -proot -e "GRANT ALL PRIVILEGES ON ploio_db.* TO 'root'@'%';"
 RUN service mariadb start && mariadb -u root -proot -e "FLUSH PRIVILEGES;"
 
-ENV DATABASE_URL = "mariadb+pymysql://root:root@127.0.0.1:3306/ploio_db"
+ENV DATABASE_URL="mysql+pymysql://root:root@host.docker.internal:3306/ploio_db"
+
+
+
 
 WORKDIR /src/
 
