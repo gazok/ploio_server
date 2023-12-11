@@ -19,9 +19,6 @@ RUN service mariadb start && mariadb -u root -proot -e "FLUSH PRIVILEGES;"
 
 ENV DATABASE_URL="mysql+pymysql://root:root@host.docker.internal:3306/ploio_db"
 
-
-
-
 WORKDIR /src/
 
 CMD uvicorn --host=0.0.0.0 --port 8000 main:app
