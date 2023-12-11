@@ -1,3 +1,6 @@
 uvicorn
 fastapi
 kubernetes
+sqlalchemy
+pymysql
+cryptography
